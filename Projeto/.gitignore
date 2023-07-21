@@ -1,0 +1,8 @@
+build/
+dist/
+nbproject/private/
+nbproject/build-impl.xml
+.DS_Store
+genfiles.properties
+*.iml
+build.xml
