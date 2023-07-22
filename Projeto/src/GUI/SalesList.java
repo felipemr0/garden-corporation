@@ -1,24 +1,17 @@
 package GUI;
 
-import code.Lists;
-import code.Sale;
+import data.Sale;
+import data.SaleDAO;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author f
- */
 public class SalesList extends javax.swing.JFrame {
 
-    private Lists system;
-
-    /**
-     * Creates new form SalesList
-     */
-    public SalesList(Lists system) {
+    private SaleDAO saleDAO;
+    
+    public SalesList() {
         super("Sales List");
+        saleDAO = new SaleDAO();
         initComponents();
-        this.system = system;
         loadTable();
     }
 
@@ -32,12 +25,12 @@ public class SalesList extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        saleTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        saleTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -48,7 +41,7 @@ public class SalesList extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(saleTable);
 
         jButton1.setText("Sair");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -89,57 +82,20 @@ public class SalesList extends javax.swing.JFrame {
 
     public void loadTable() {
         DefaultTableModel model = new javax.swing.table.DefaultTableModel();
-        model.addColumn("Product ID");
-        model.addColumn("Product Name");
-        model.addColumn("Quantity");
+        model.addColumn("Product");
+        model.addColumn("Customer");
         model.addColumn("Amount");
 
-        for (Sale sale : system.getSaleList()) {
-            model.addRow(new Object[]{sale.getIdProd(), sale.getProductName(), sale.getQuantity(), sale.getAmount()});
+        for (Sale sale : saleDAO.getAll()) {
+            model.addRow(new Object[]{ sale.getProduct().getName(), sale.getCustomer().getName(), sale.getAmount()});
         }
-
-        jTable1.setModel(model);
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SalesList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SalesList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SalesList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SalesList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                //new ListaVendas().setVisible(true);
-            }
-        });
+        
+        saleTable.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable saleTable;
     // End of variables declaration//GEN-END:variables
 }
