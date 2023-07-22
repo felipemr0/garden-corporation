@@ -1,17 +1,17 @@
 package GUI;
 
 import javax.swing.table.DefaultTableModel;
-import code.Lists;
-import code.Product;
+import data.Product;
+import data.ProductDAO;
 
 public class ProductList extends javax.swing.JFrame {
 
-    private Lists system;
+    private ProductDAO productDAO;
 
-    public ProductList(Lists system) {
+    public ProductList() {
         super("Product list");
+        productDAO = new ProductDAO();
         initComponents();
-        this.system = system;
         loadJTable();
     }
 
@@ -31,14 +31,14 @@ public class ProductList extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome do Produto", "Preço", "ID ", "Quantidade", "Estado"
+                "Name", "Price", "ID ", "Quantity"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -55,7 +55,6 @@ public class ProductList extends javax.swing.JFrame {
             ProductsTable.getColumnModel().getColumn(1).setResizable(false);
             ProductsTable.getColumnModel().getColumn(2).setResizable(false);
             ProductsTable.getColumnModel().getColumn(3).setResizable(false);
-            ProductsTable.getColumnModel().getColumn(4).setResizable(false);
         }
         ProductsTable.getAccessibleContext().setAccessibleName("table");
 
@@ -108,57 +107,17 @@ public class ProductList extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public void loadJTable() {
-        String h;
         DefaultTableModel model = new javax.swing.table.DefaultTableModel();
         model.addColumn("Id");
         model.addColumn("Name");
         model.addColumn("Price");
         model.addColumn("Quantity");
-        model.addColumn("Status");
-
-        for (Product c : system.getProductList()) {
-            if (c.getReserved() == true) {
-                h = "Reserved";
-            } else {
-                h = "Not reserved";
-            }
-            model.addRow(new Object[]{c.getIdProd(), c.getProductName(), c.getPrice(), c.getQuant(), h});
-        }
-        ProductsTable.setModel(model);
-    }
-
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProductList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProductList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProductList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProductList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-                //new ListaProd().setVisible(true);
-            }
+        
+        productDAO.getAll().forEach((product) -> {
+            model.addRow(new Object[]{product.getID(), product.getName(), product.getPrice(), product.getStock()});
         });
+        
+        ProductsTable.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
