@@ -7,3 +7,4 @@ genfiles.properties
 *.iml
 build.xml
 *.obj
+.gradle
