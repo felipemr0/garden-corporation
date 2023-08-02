@@ -8,3 +8,4 @@ genfiles.properties
 build.xml
 *.obj
 .gradle
+.idea/

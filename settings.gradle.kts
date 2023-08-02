@@ -10,5 +10,14 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.4.0"
 }
 
+dependencyResolutionManagement {
+    repositories {
+       // Use Maven Central for resolving dependencies.
+       mavenCentral()
+    }
+}
+
 rootProject.name = "garden-corporation"
 include("app")
+include("data")
+include("data")

@@ -10,17 +10,13 @@ plugins {
     application
 }
 
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
-
 dependencies {
     // Use JUnit test framework.
     testImplementation("junit:junit:4.13.2")
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
+    implementation(project(":data"))
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -32,5 +28,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("gardencorporation.App")
+    mainClass.set("UI.App")
 }
