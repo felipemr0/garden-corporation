@@ -1,22 +1,23 @@
 package UI;
 
-import org.gardencorporation.*;
-
-import javax.swing.JOptionPane;
 import java.util.List;
-
+import javax.swing.JOptionPane;
+import org.gardencorporation.*;
+import org.gardencorporation.entities.Customer;
+import org.gardencorporation.entities.CustomerCard;
+import org.gardencorporation.entities.OfferCheck;
 
 public class CreateOfferCheck extends javax.swing.JFrame {
-    
-    private CustomerDAO customerDAO;
-    private CustomerCardDAO customerCardDAO;
-    private OfferCheckDAO offerCheckDAO;
+
+    private OfferCheckService offerCheckService;
+    private List<CustomerCard> customerCardList;
+    private List<Customer> customerList;
+
     private final static String SUCCESS_MSG = "Offer Check Created";
-    
+
     public CreateOfferCheck() {
-        customerDAO = new CustomerDAO();
-        customerCardDAO = new CustomerCardDAO();
-        offerCheckDAO = new OfferCheckDAO();
+        offerCheckService = new OfferCheckService();
+        loadLists();
         initComponents();
     }
 
@@ -37,7 +38,7 @@ public class CreateOfferCheck extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         ownerList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        customerList = new javax.swing.JList<>();
+        customerJList = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -61,20 +62,18 @@ public class CreateOfferCheck extends javax.swing.JFrame {
         jLabel3.setText("To");
 
         ownerList.setModel(new javax.swing.AbstractListModel<CustomerCard>() {
-            List<CustomerCard> customerList = customerCardDAO.getAll();
-            public int getSize() { return customerList.size(); }
-            public CustomerCard getElementAt(int i) { return customerList.get(i); }
+            public int getSize() { return customerCardList.size(); }
+            public CustomerCard getElementAt(int i) { return customerCardList.get(i); }
         });
         ownerList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(ownerList);
 
-        customerList.setModel(new javax.swing.AbstractListModel<Customer>() {
-            List<Customer> customerList = customerDAO.getAll();
+        customerJList.setModel(new javax.swing.AbstractListModel<Customer>() {
             public int getSize() { return customerList.size(); }
             public Customer getElementAt(int i) { return customerList.get(i); }
         });
-        customerList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(customerList);
+        customerJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(customerJList);
 
         jLabel5.setText("Value");
 
@@ -136,30 +135,28 @@ public class CreateOfferCheck extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
+    private void loadLists() {
+        DAO<Customer> customerDAO = new DAO<>();
+        DAO<CustomerCard> customerCardDAO = new DAO<>();
+
+        customerCardList = customerCardDAO.getAll(CustomerCard.class);
+        customerList = customerDAO.getAll(Customer.class);
+    }
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         CustomerCard owner = ownerList.getSelectedValue();
-        Customer customer = customerList.getSelectedValue();
+        Customer customer = customerJList.getSelectedValue();
         Double value = Double.parseDouble(valueTextField.getText());
-        
-        offerCheckDAO.add(new OfferCheck(owner, customer, value));
-        //TODO update customer expenses
-        
-        List<CustomerCard> customerCardList = customerCardDAO.getAll();
-        customerCardList.forEach((customerCard) -> {
-            if (customerCard.getID() == owner.getID()) {
-                customerCard.addPoints(Sale.pointsCalculation(value));
-            }
-        });
-        
-        Helper.saveObj(CustomerCard.ENTITY_PATH, customerCardList);
-        
+
+        offerCheckService.addOfferCheck(new OfferCheck(owner, customer, value));
+
         JOptionPane.showMessageDialog(rootPane, SUCCESS_MSG);
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<Customer> customerList;
+    private javax.swing.JList<Customer> customerJList;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel3;

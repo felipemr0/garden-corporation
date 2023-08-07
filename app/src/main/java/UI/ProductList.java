@@ -1,16 +1,14 @@
 package UI;
 
-import org.gardencorporation.ProductDAO;
-
 import javax.swing.table.DefaultTableModel;
+import org.gardencorporation.DAO;
+import org.gardencorporation.entities.Product;
 
 public class ProductList extends javax.swing.JFrame {
 
-    private ProductDAO productDAO;
-
     public ProductList() {
         super("Product list");
-        productDAO = new ProductDAO();
+        //productDAO = new ProductDAO();
         initComponents();
         loadJTable();
     }
@@ -112,11 +110,14 @@ public class ProductList extends javax.swing.JFrame {
         model.addColumn("Name");
         model.addColumn("Price");
         model.addColumn("Quantity");
-        
-        productDAO.getAll().forEach((product) -> {
-            model.addRow(new Object[]{product.getID(), product.getName(), product.getPrice(), product.getStock()});
+
+        DAO<Product> productDAO = new DAO<>();
+
+        productDAO.getAll(Product.class).forEach((object) -> {
+            Product product = (Product) object;
+            model.addRow(new Object[]{product.getId(), product.getName(), product.getPrice(), product.getStock()});
         });
-        
+
         ProductsTable.setModel(model);
     }
 

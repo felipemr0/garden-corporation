@@ -1,18 +1,17 @@
 package UI;
 
-import org.gardencorporation.Product;
-import org.gardencorporation.ProductDAO;
-
 import javax.swing.JOptionPane;
+import org.gardencorporation.DAO;
+import org.gardencorporation.entities.Product;
 
 public class CreateProduct extends javax.swing.JFrame {
 
-    private ProductDAO productDAO;
+    //private ProductDAO productDAO;
     private final static String SUCCESS_MESSAGE = "Product created successfully";
-    
+
     public CreateProduct() {
         super("Product - Create");
-        productDAO = new ProductDAO();
+        //productDAO = new ProductDAO();
         initComponents();
     }
 
@@ -130,7 +129,8 @@ public class CreateProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        productDAO.add(new Product(jTextField2.getText(), Double.parseDouble(jTextField3.getText())));
+        DAO<Product> productDAO = new DAO<>();
+        productDAO.create(new Product(jTextField2.getText(), Double.parseDouble(jTextField3.getText())));
         JOptionPane.showMessageDialog(this.rootPane, SUCCESS_MESSAGE);
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed

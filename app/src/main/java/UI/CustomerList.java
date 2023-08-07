@@ -1,18 +1,17 @@
 package UI;
 
-import org.gardencorporation.Customer;
-import org.gardencorporation.CustomerDAO;
-
 import javax.swing.table.DefaultTableModel;
+import org.gardencorporation.entities.Customer;
+import org.gardencorporation.DAO;
 
 public class CustomerList extends javax.swing.JFrame {
 
-    private CustomerDAO customerDAO;
-    
+    private DAO customerDAO;
+
     public CustomerList() {
         super("Customer List");
         initComponents();
-        customerDAO = new CustomerDAO();
+        customerDAO = new DAO<Customer>();
         loadTable();
     }
 
@@ -99,9 +98,10 @@ public class CustomerList extends javax.swing.JFrame {
         model.addColumn("Phone Number");
         model.addColumn("Expenses");
 
-        for (Customer customer : customerDAO.getAll()) {
-            model.addRow(new Object[]{customer.getName(), customer.getID(), customer.getPhoneNumber(), 0});
-        }
+        customerDAO.getAll(Customer.class).forEach((object) -> {
+            Customer customer = (Customer) object;
+            model.addRow(new Object[]{customer.getName(), customer.getId(), customer.getPhoneNumber(), 0});
+        });
 
         customerTable.setModel(model);
     }

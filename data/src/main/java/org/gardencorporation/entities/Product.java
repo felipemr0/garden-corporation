@@ -1,26 +1,35 @@
-package org.gardencorporation;
+package org.gardencorporation.entities;
 
-import java.io.Serializable;
-import java.util.Random;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import java.sql.Date;
 
-public class Product implements Serializable {
+@Entity
+public class Product {
 
-    private final int ID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int Id;
     private String name;
     private double price;
     private int stock;
+    private Date createdAt;
 
-    public static final String ENTITY_PATH = "product.obj";
+    public Product() {
+
+    }
 
     public Product(String _name, double _price) {
         name = _name;
         price = _price;
-        ID = new Random().nextInt(1000);
         stock = 0;
+        createdAt = new Date(System.currentTimeMillis());
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return Id;
     }
 
     public String getName() {
@@ -42,7 +51,7 @@ public class Product implements Serializable {
     public int getStock() {
         return stock;
     }
-    
+
     public void setStock(int _stock) {
         stock = _stock;
     }
@@ -54,9 +63,13 @@ public class Product implements Serializable {
     public void removeStock(int _stock) {
         stock = (stock - _stock >= 0) ? stock - _stock : 0;
     }
-    
-    @Override
-    public String toString() {
-        return name + " - " + price + "€";
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
 }

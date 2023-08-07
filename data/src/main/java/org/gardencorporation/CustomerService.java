@@ -1,20 +1,26 @@
 package org.gardencorporation;
 
+import org.gardencorporation.entities.Customer;
+import org.gardencorporation.entities.CustomerCard;
+
 public class CustomerService {
-    
-    private final CustomerDAO customerDAO;
-    private final CustomerCardDAO customerCardDAO;
+
+    private final DAO customerDAO;
 
     public CustomerService() {
-        customerDAO = new CustomerDAO();
-        customerCardDAO = new CustomerCardDAO();
+        customerDAO = new DAO<Customer>();
     }
 
-    public void addCustomer(Customer customer, boolean addCard) {
-        customerDAO.add(customer);
+    public void addCustomer(String name, String phoneNumber, boolean addCard) {
+        Customer customer = new Customer(name, phoneNumber);
+        customerDAO.create(customer);
         if (addCard) {
-            customerCardDAO.add(new CustomerCard(customer));
+            customerDAO.create(new CustomerCard(customer));
         }
     }
 
+    public void addPointsFromOfferCheck(double value, CustomerCard customerCard) {
+        customerCard.addPoints(SaleService.pointsCalculation(value));
+        customerDAO.update(customerCard);
+    }
 }

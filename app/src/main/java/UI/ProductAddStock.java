@@ -1,22 +1,16 @@
 package UI;
 
-import org.gardencorporation.Helper;
-import org.gardencorporation.Product;
-import org.gardencorporation.ProductDAO;
-
-import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class ProductAddStock extends javax.swing.JFrame {
 
-    private ProductDAO productDAO;
+    //private ProductDAO productDAO;
     private static final String SUCCESS_MSG = "Saved";
     private DefaultTableModel model;
-    
+
     public ProductAddStock() {
         super("Add Quantity to product");
-        productDAO = new ProductDAO();
+        //productDAO = new ProductDAO();
         initComponents();
         model = (DefaultTableModel) productTable.getModel();
         loadTable();
@@ -120,23 +114,23 @@ public class ProductAddStock extends javax.swing.JFrame {
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         int i = 0;
-        List<Product> _productList = productDAO.getAll();
-        for (Product product: _productList) {
+        /*List<Product> _productList = productDAO.getAll();
+        for (Product product : _productList) {
             product.setStock((int) model.getValueAt(i, 2));
             i += 1;
         }
-        
-        Helper.saveObj(Product.ENTITY_PATH, _productList);
+
+        //Helper.saveObj(Product.ENTITY_PATH, _productList);
         JOptionPane.showMessageDialog(rootPane, SUCCESS_MSG);
-        setVisible(false);
+        setVisible(false);*/
     }//GEN-LAST:event_jToggleButton1ActionPerformed
-            
+
     private void loadTable() {
-        for (Product product : productDAO.getAll()) {
+        /*for (Product product : productDAO.getAll()) {
             model.insertRow(model.getRowCount(), new Object[]{product.getID(), product.getName(), product.getStock()});
-        }        
+        }*/
     }
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed

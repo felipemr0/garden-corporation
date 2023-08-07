@@ -1,6 +1,5 @@
 package UI;
 
-import org.gardencorporation.Customer;
 import org.gardencorporation.CustomerService;
 
 import javax.swing.JOptionPane;
@@ -117,8 +116,8 @@ public class CreateCustomer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
-        Customer customer = new Customer(nameTextField.getText(), phoneNumberTextField.getText());
-        customerService.addCustomer(customer, customerCardCheckBox.isSelected());
+        customerService.addCustomer(nameTextField.getText(), phoneNumberTextField.getText(), customerCardCheckBox.isSelected());
+
         JOptionPane.showMessageDialog(null, CUSTOMER_CREATED_SUCCESSFULLY);
         setVisible(false);
     }//GEN-LAST:event_createBtnActionPerformed

@@ -1,17 +1,13 @@
 package UI;
 
-import org.gardencorporation.Sale;
-import org.gardencorporation.SaleDAO;
-
 import javax.swing.table.DefaultTableModel;
 
 public class SalesList extends javax.swing.JFrame {
 
-    private SaleDAO saleDAO;
-    
+    //private SaleDAO saleDAO;
     public SalesList() {
         super("Sales List");
-        saleDAO = new SaleDAO();
+        //saleDAO = new SaleDAO();
         initComponents();
         loadTable();
     }
@@ -87,10 +83,9 @@ public class SalesList extends javax.swing.JFrame {
         model.addColumn("Customer");
         model.addColumn("Amount");
 
-        for (Sale sale : saleDAO.getAll()) {
+        /*for (Sale sale : List.of()) {
             model.addRow(new Object[]{ sale.getProduct().getName(), sale.getCustomer().getName(), sale.getAmount()});
-        }
-        
+        }*/
         saleTable.setModel(model);
     }
 

@@ -1,16 +1,12 @@
 package UI;
 
-import org.gardencorporation.OfferCheck;
-import org.gardencorporation.OfferCheckDAO;
-
 import javax.swing.table.DefaultTableModel;
+import org.gardencorporation.DAO;
+import org.gardencorporation.entities.OfferCheck;
 
 public class OfferCheckList extends javax.swing.JFrame {
-    
-    private OfferCheckDAO offerCheckDAO;
-    
+
     public OfferCheckList() {
-        offerCheckDAO = new OfferCheckDAO();
         initComponents();
         loadTable();
     }
@@ -97,12 +93,14 @@ public class OfferCheckList extends javax.swing.JFrame {
         model.addColumn("Initial value");
         model.addColumn("Current value");
 
-        for (OfferCheck offerCheck : offerCheckDAO.getAll()) {
+        DAO<OfferCheck> offerCheckDAO = new DAO<>();
+
+        for (OfferCheck offerCheck : offerCheckDAO.getAll(OfferCheck.class)) {
             model.addRow(new Object[]{
-                offerCheck.getID(), offerCheck.getOwner().getCustomer().getName(), offerCheck.getCustomer().getName(), offerCheck.getInitialValue() , offerCheck.getValue()
+                offerCheck.getId(), offerCheck.getOwner().getCustomer().getName(), offerCheck.getCustomer().getName(), offerCheck.getInitialValue(), offerCheck.getValue()
             });
         }
-        
+
         offerCheckList.setModel(model);
     }
 

@@ -1,29 +1,33 @@
 package UI;
 
-import org.gardencorporation.*;
-
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.util.List;
-
+import org.gardencorporation.*;
+import org.gardencorporation.entities.Customer;
+import org.gardencorporation.entities.CustomerCard;
+import org.gardencorporation.entities.OfferCheck;
+import org.gardencorporation.entities.Product;
 
 public class CreateCustomerSale extends javax.swing.JFrame {
-    
+
     private List<Customer> customerList;
     private List<CustomerCard> customerCardList;
     private List<Product> productList;
     private List<OfferCheck> offerCheckList;
-    private SaleDAO saleDAO;
+    //private SaleDAO saleDAO;
     private static final String SUCCESS_MSG = "Sale created successfully";
-    
+
     public CreateCustomerSale() {
         super("Sale - Create");
-        customerList = new CustomerDAO().getAll();
-        customerCardList = new CustomerCardDAO().getAll();
-        productList = new ProductDAO().getAll();
-        offerCheckList = new OfferCheckDAO().getAll();
-        saleDAO = new SaleDAO();
+        DAO<CustomerCard> customerCardDAO = new DAO<CustomerCard>();
+        DAO<Customer> customerDAO = new DAO<Customer>();
+
+        //customerList = customerDAO.getAll();
+        //customerCardList = customerCardDAO.getAll(CustomerCard.class);
+        //productList = new ProductDAO().getAll();
+        //offerCheckList = new OfferCheckDAO().getAll();
+        //saleDAO = new SaleDAO();
         initComponents();
         load();
     }
@@ -299,45 +303,45 @@ public class CreateCustomerSale extends javax.swing.JFrame {
     private void customerJListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_customerJListValueChanged
         // TODO add your handling code here:
         resetCustomerPanel();
-        
-        for (CustomerCard customerCard: customerCardList) {
+
+        /*for (CustomerCard customerCard: customerCardList) {
             if (customerJList.getSelectedValue().getID() == customerCard.getCustomer().getID()) {
                 pointsTextField.setText(String.valueOf(customerCard.getPoints()));
                 pointsPanel.setVisible(true);
                 break;
             }
         }
-        
+
         List<OfferCheck> filteredList = offerCheckList.stream()
                 .filter((offerCheck) -> customerJList.getSelectedValue().getID() == offerCheck.getCustomer().getID())
                 .toList();
-        
+
         if(filteredList.size() > 0) {
             offerCheckJList.setModel(new javax.swing.AbstractListModel<OfferCheck>() {
                 public int getSize() { return filteredList.size(); }
                 public OfferCheck getElementAt(int i) { return filteredList.get(i); }
             });
-            
+
             offerCheckPanel2.setVisible(true);
         }
-        resetAmountAndQuantity();
+        resetAmountAndQuantity();*/
     }//GEN-LAST:event_customerJListValueChanged
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (!totalAmountToPay.getText().trim().isEmpty()) {
+        /*if (!totalAmountToPay.getText().trim().isEmpty()) {
             Product product = productJList.getSelectedValue();
             int quantity = Integer.parseInt(quantityTextField.getText());
             Customer customer = customerJList.getSelectedValue();
-            Sale sale = new Sale(customer, product, quantity, Double.parseDouble(totalAmountToPay.getText()));
-            saleDAO.add(sale);
+            Sale sale = new Sale(customer, Double.parseDouble(totalAmountToPay.getText()));
+            //saleDAO.save(sale);
             //TODO recalculate customer points and stock
             JOptionPane.showMessageDialog(rootPane, SUCCESS_MSG);
             setVisible(false);
-        }
+        }*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void pointsTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pointsTextFieldActionPerformed
@@ -363,60 +367,60 @@ public class CreateCustomerSale extends javax.swing.JFrame {
         refreshAmount();
     }//GEN-LAST:event_pointsRadioBtnItemStateChanged
 
-    private void load(){
+    private void load() {
         pointsPanel.setVisible(false);
         offerCheckPanel2.setVisible(false);
-        
+
         quantityTextField.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-              refreshAmount();
+                refreshAmount();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-              refreshAmount();
+                refreshAmount();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 refreshAmount();
             }
-          });
+        });
     }
-    
+
     private void refreshAmount() {
         try {
             int quantity = Integer.parseInt(quantityTextField.getText());
             if (productJList.getSelectedValue() != null && quantity > 0) {
                 int points = (pointsRadioBtn.isSelected()) ? Integer.parseInt(pointsTextField.getText()) : 0;
-                double valueFromCheckOffer = (offerCheckJList.getSelectedValue() != null) ? offerCheckJList.getSelectedValue().getValue() : 0 ;
+                double valueFromCheckOffer = (offerCheckJList.getSelectedValue() != null) ? offerCheckJList.getSelectedValue().getValue() : 0;
                 Double amount = productJList.getSelectedValue().getPrice() * Integer.parseInt(quantityTextField.getText());
                 amountTextField.setText(String.valueOf(amount));
 
-                Double newAmount = Sale.getDiscountedValue(amount, points);
+                Double newAmount = SaleService.getDiscountedValue(amount, points);
                 newAmount = newAmount - valueFromCheckOffer;
                 totalAmountToPay.setText(newAmount.toString());
             }
         } catch (NumberFormatException exception) {
-        
+
         }
     }
-    
+
     private void resetCustomerPanel() {
         pointsPanel.setVisible(false);
         offerCheckPanel2.setVisible(false);
         pointsRadioBtn.setSelected(false);
         offerCheckJList.setSelectedValue(null, rootPaneCheckingEnabled);
     }
-    
+
     private void resetAmountAndQuantity() {
         amountTextField.setText("");
         quantityTextField.setText("");
         totalAmountToPay.setText("");
     }
-        
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField amountTextField;
     private javax.swing.JList<Customer> customerJList;

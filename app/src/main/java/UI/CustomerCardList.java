@@ -1,17 +1,16 @@
 package UI;
 
-import org.gardencorporation.CustomerCard;
-import org.gardencorporation.CustomerCardDAO;
-
 import javax.swing.table.DefaultTableModel;
+import org.gardencorporation.entities.CustomerCard;
+import org.gardencorporation.DAO;
 
 public class CustomerCardList extends javax.swing.JFrame {
-    
-    private CustomerCardDAO customerCardDAO;
-    
+
+    private DAO<CustomerCard> customerDAO;
+
     public CustomerCardList() {
         super("Customers with cards");
-        customerCardDAO = new CustomerCardDAO();
+        customerDAO = new DAO<CustomerCard>();
         initComponents();
         carregartables();
     }
@@ -100,10 +99,11 @@ public class CustomerCardList extends javax.swing.JFrame {
         model.addColumn("Card ID");
         model.addColumn("Points");
 
-        for (CustomerCard customerCard : customerCardDAO.getAll()) {
-            model.addRow(new Object[]{customerCard.getCustomer().getName(), customerCard.getID(), customerCard.getPoints()});
-        }
-        
+        customerDAO.getAll(CustomerCard.class).forEach((object) -> {
+            CustomerCard customerCard = (CustomerCard) object;
+            model.addRow(new Object[]{customerCard.getCustomer().getName(), customerCard.getId(), customerCard.getPoints()});
+        });
+
         jTable1.setModel(model);
     }
 
